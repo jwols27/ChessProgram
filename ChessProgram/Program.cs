@@ -1,9 +1,12 @@
 ﻿using System;
+using board;
 
 namespace ChessProgram {
     class Program {
         static void Main(string[] args) {
-            Console.WriteLine("Hello World!");
+            Board board = new Board(8, 8);
+
+            GameView.viewBoard(board);
         }
     }
 }
