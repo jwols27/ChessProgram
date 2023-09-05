@@ -5,16 +5,18 @@ namespace chess {
         public Board board { get; private set;}
         private int turn;
         private Color currentPlayer;
+        public bool isOver { get; private set; }
 
         public ChessMatch() {
             board = new Board(8, 8);
             turn = 1;
             currentPlayer = Color.White;
+            isOver = false;
             placePieces();
         }
 
         public void movePiece(Position start, Position end) {
-            Piece p = board.piece(start);
+            Piece p = board.removePiece(start);
             p.incrementMoveCount();
             Piece captured = board.removePiece(end);
             board.placePiece(p, end);
