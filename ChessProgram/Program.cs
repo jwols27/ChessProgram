@@ -7,14 +7,10 @@ namespace ChessProgram {
         static void Main(string[] args) {
 
             try {
-                Board board = new Board(8, 8);
-
-                board.placePiece(new Rook(Color.Black, board), new Position(0, 0));
-                board.placePiece(new Queen(Color.Black, board), new Position(1, 3));
-                board.placePiece(new King(Color.Black, board), new Position(2, 4));
+                ChessMatch match = new ChessMatch();
 
 
-                GameView.renderBoard(board);
+                GameView.renderBoard(match.board);
             } catch (BoardException e) {
                 Console.WriteLine(e.Message);
             }
