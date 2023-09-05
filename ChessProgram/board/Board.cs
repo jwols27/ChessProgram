@@ -10,13 +10,32 @@
             pieces = new Piece[rows, columns];
         }
 
-        public Piece piece(int row, int column) {
-            return pieces[row, column];
+        public Piece piece(Position pos) {
+            return pieces[pos.row, pos.column];
         }
 
         public void placePiece(Piece p, Position pos) {
+            if (!isPositionEmpty(pos))
+                throw new BoardException("The desired position is not empty");
             pieces[pos.row, pos.column] = p;
             p.position = pos;
+        }
+
+        public bool isPositionEmpty(Position pos) {
+            validatePosition(pos);
+            return piece(pos) == null;
+        }
+
+        public bool isPositionValid(Position pos) {
+            if((pos.row < 0 || pos.row > rows) || (pos.column < 0 || pos.column > columns)) {
+                return false;
+            }
+            return true;
+        }
+
+        public void validatePosition(Position pos) {
+            if (!isPositionValid(pos))
+                throw new BoardException("Invalid Position");
         }
     }
 }
