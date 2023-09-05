@@ -7,8 +7,8 @@
 
         public Board board { get; protected set; }
 
-        public Piece(Position position, Color color, Board board) {
-            this.position = position;
+        public Piece(Color color, Board board) {
+            this.position = null;
             this.color = color;
             this.board = board;
             this.moveCount = 0;
