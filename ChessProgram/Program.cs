@@ -14,7 +14,7 @@ namespace ChessProgram {
                 board.placePiece(new King(Color.Black, board), new Position(2, 4));
 
 
-                GameView.viewBoard(board);
+                GameView.renderBoard(board);
             } catch (BoardException e) {
                 Console.WriteLine(e.Message);
             }
