@@ -13,5 +13,9 @@
             this.board = board;
             this.moveCount = 0;
         }
+
+        public void incrementMoveCount() {
+            moveCount++;
+        }
     }
 }

@@ -21,6 +21,15 @@
             p.position = pos;
         }
 
+        public Piece removePiece(Position pos) {
+            if (isPositionEmpty(pos)) return null;
+
+            Piece aux = piece(pos);
+            aux.position = null;
+            pieces[pos.row, pos.column] = null;
+            return aux;
+        }
+
         public bool isPositionEmpty(Position pos) {
             validatePosition(pos);
             return piece(pos) == null;
