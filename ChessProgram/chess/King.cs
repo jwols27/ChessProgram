@@ -1,18 +1,13 @@
 ﻿using board;
 
 namespace chess {
-    class King : Piece {
+    class King : ChessPiece {
         public King(Color color, Board board) : base(color, board) { 
         
         }
 
         public override string ToString() {
             return "K";
-        }
-
-        private bool canMove(Position pos) {
-            Piece p = board.piece(pos);
-            return p == null || p.color != color;
         }
 
         public override bool[,] possibleMoves() {

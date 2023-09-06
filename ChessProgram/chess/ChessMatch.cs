@@ -133,7 +133,7 @@ namespace chess {
         }
 
         public void validateEnd(Position start, Position end) {
-            if (!board.piece(start).canMoveTo(end))
+            if (!board.piece(start).isMovePossible(end))
                 throw new BoardException("Invalid end position");
         }
 
@@ -145,10 +145,9 @@ namespace chess {
         private void placePieces() {
 
             placeNewPiece('a', 8, new King(Color.Black, board));
-            placeNewPiece('b', 8, new Rook(Color.Black, board));
+            placeNewPiece('d', 7, new Pawn(Color.Black, board));
             placeNewPiece('e', 1, new King(Color.White, board));
-            placeNewPiece('e', 7, new Rook(Color.White, board));
-            placeNewPiece('b', 3, new Rook(Color.White, board));
+            placeNewPiece('c', 5, new Pawn(Color.White, board));
 
             //placeNewPiece('a', 8, new Rook(Color.Black, board));
             //placeNewPiece('b', 8, new Knight(Color.Black, board));

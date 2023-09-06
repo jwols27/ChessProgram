@@ -30,7 +30,7 @@
             return false;
         }
 
-        public bool canMoveTo(Position pos) {
+        public bool isMovePossible(Position pos) {
             return possibleMoves()[pos.row, pos.column];
         }
 
