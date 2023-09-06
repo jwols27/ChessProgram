@@ -14,6 +14,14 @@
             this.column = column;
         }
 
+        public Position setColumn(int value) {
+            return new Position(row, column + value);
+        }
+
+        public Position setRow(int value) {
+            return new Position(row + value, column);
+        }
+
         public override string ToString() {
             return row + ", " + column;
         }

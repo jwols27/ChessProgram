@@ -34,28 +34,35 @@ namespace chess {
             return captured.Where(p => p.color == color).ToHashSet();
         }
 
+        public void changePlayer() {
+            if (currentPlayer == Color.White) {
+                currentPlayer = Color.Black;
+                return;
+            }
+            currentPlayer = Color.White;
+        }
+
         public Color opponent(Color color) {
             if (color == Color.White)
                 return Color.Black;
             return Color.White;
         }
 
-        public Piece king(Color color) {
+        public King king(Color color) {
             foreach (Piece p in activePieces(color))
-                if (p is King) return p;
+                if (p is King) return p as King;
             return null;
         }
 
         public bool isKingInCheck(Color color) {
-            Piece K = king(color);
+            King K = king(color);
             if (K == null)
                 throw new BoardException("There is no " + color + " king");
             foreach (Piece p in activePieces(opponent(color))) {
                 bool[,] mat = p.possibleMoves();
-                if (mat[K.position.row, K.position.column])
-                    return true;
+                if (mat[K.position.row, K.position.column]) 
+                    return true;          
             }
-                
             return false;
         }
 
@@ -78,13 +85,30 @@ namespace chess {
             return true;
         }
 
+       
+
         public Piece movePiece(Position start, Position end) {
             Piece p = board.removePiece(start);
             p.incrementMoveCount();
             Piece capped = board.removePiece(end);
             if (capped != null)
                 captured.Add(capped);
+
+            // Castling
+            if (p is King && end.column == start.column + 2)
+                movePiece(start.setColumn(3), start.setColumn(1));
+
+            if (p is King && end.column == start.column - 2)
+                movePiece(start.setColumn(-4), start.setColumn(-1));
+
+            // En passant
+
+            // Promotion
+            
+
+
             board.placePiece(p, end);
+
             return capped;
         }
 
@@ -115,14 +139,6 @@ namespace chess {
             changePlayer();
         }
 
-        public void changePlayer() {
-            if (currentPlayer == Color.White) {
-                currentPlayer = Color.Black;
-                return;
-            }
-            currentPlayer = Color.White;
-        }
-
         public void validateStart(Position pos) {
             if (board.piece(pos) == null)
                 throw new BoardException("There are no pieces in the chosen position");
@@ -142,12 +158,24 @@ namespace chess {
             active.Add(piece);
         }
 
+        public void placeNewPiece(Position pos, Piece piece) {
+            board.placePiece(piece, pos);
+            active.Add(piece);
+        }
+
         private void placePieces() {
 
-            placeNewPiece('a', 8, new King(Color.Black, board));
+            placeNewPiece('e', 8, new King(Color.Black, board, this));
             placeNewPiece('d', 7, new Pawn(Color.Black, board));
-            placeNewPiece('e', 1, new King(Color.White, board));
-            placeNewPiece('c', 5, new Pawn(Color.White, board));
+            placeNewPiece('a', 8, new Rook(Color.Black, board));
+            placeNewPiece('h', 8, new Rook(Color.Black, board));
+            placeNewPiece('f', 6, new Rook(Color.Black, board));
+            placeNewPiece('c', 2, new Pawn(Color.Black, board));
+
+            placeNewPiece('e', 1, new King(Color.White, board, this));
+            placeNewPiece('b', 7, new Pawn(Color.White, board));
+            placeNewPiece('a', 1, new Rook(Color.White, board));
+            placeNewPiece('h', 1, new Rook(Color.White, board));
 
             //placeNewPiece('a', 8, new Rook(Color.Black, board));
             //placeNewPiece('b', 8, new Knight(Color.Black, board));
