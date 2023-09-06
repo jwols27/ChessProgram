@@ -9,6 +9,12 @@ namespace chess {
         public override string ToString() {
             return "N";
         }
+
+        public override bool[,] possibleMoves() {
+            bool[,] mat = new bool[board.rows, board.columns];
+
+            return mat;
+        }
     }
 }
 

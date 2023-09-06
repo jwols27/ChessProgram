@@ -1,4 +1,6 @@
-﻿namespace board {
+﻿using System;
+
+namespace board {
     class Board {
         public int rows { get; set; }
         public int columns { get; set; }
@@ -12,6 +14,10 @@
 
         public Piece piece(Position pos) {
             return pieces[pos.row, pos.column];
+        }
+
+        public Piece piece(int row, int column) {
+            return pieces[row, column];
         }
 
         public void placePiece(Piece p, Position pos) {
@@ -36,7 +42,7 @@
         }
 
         public bool isPositionValid(Position pos) {
-            if((pos.row < 0 || pos.row > rows) || (pos.column < 0 || pos.column > columns)) {
+            if((pos.row < 0 || pos.row >= rows) || (pos.column < 0 || pos.column >= columns)) {
                 return false;
             }
             return true;

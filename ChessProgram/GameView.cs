@@ -8,14 +8,28 @@ namespace ChessProgram {
             for(int i = 0; i < board.rows; i++) {
                 Console.Write(8 - i + "  ");
                 for (int j = 0; j < board.columns; j++) {
-                    Position pos = new Position(i, j);
-                    if (board.isPositionEmpty(pos))
-                        Console.Write("-");
-                    else
-                        renderPiece(board.piece(pos));
+                    renderPiece(board.piece(new Position(i, j)));
                     Console.Write(" ");
                 }
                 Console.WriteLine();
+            }
+            Console.WriteLine("\n   a b c d e f g h");
+        }
+
+        public static void renderBoard(Board board, bool[,] posMoves) {
+
+            ConsoleColor originalBg = Console.BackgroundColor;
+            ConsoleColor highlightedBg = ConsoleColor.DarkGray;
+
+            for (int i = 0; i < board.rows; i++) {
+                Console.Write(8 - i + "  ");
+                for (int j = 0; j < board.columns; j++) {
+                    Console.BackgroundColor = (posMoves[i, j]) ? highlightedBg : originalBg;
+                    renderPiece(board.piece(new Position(i, j)));
+                    Console.Write(" ");
+                }
+                Console.WriteLine();
+                Console.BackgroundColor = originalBg;
             }
             Console.WriteLine("\n   a b c d e f g h");
         }
@@ -28,6 +42,11 @@ namespace ChessProgram {
         }
 
         public static void renderPiece(Piece p) {
+            if(p == null) {
+                Console.Write("-");
+                return;
+            }
+
             ConsoleColor aux = Console.ForegroundColor;
             switch (p.color) {
                 case Color.Black:

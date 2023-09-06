@@ -15,20 +15,28 @@ namespace ChessProgram {
 
                     Console.WriteLine("\nFrom:");
                     Position start = GameView.readChessPosition().toPosition();
-                    Console.WriteLine("To:");
+                    if (match.board.piece(start) == null) continue;
+
+                    bool[,] possibleMoves = match.board.piece(start).possibleMoves();
+
+                    Console.Clear();
+                    GameView.renderBoard(match.board, possibleMoves);
+
+                    Console.WriteLine("\nTo:");
                     Position end = GameView.readChessPosition().toPosition();
 
                     match.movePiece(start, end);
 
                 }
 
-                
-            } catch (BoardException e) {
+
+            }
+            catch (BoardException e) {
                 Console.WriteLine(e.Message);
             }
-            catch (Exception e) {
-                Console.WriteLine(e.Message);
-            }
+            //catch (Exception e) {
+            //    Console.WriteLine(e.Message);
+            //}
         }
     }
 }

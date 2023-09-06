@@ -51,7 +51,7 @@ namespace chess {
             board.placePiece(new Rook(Color.White, board), new ChessPosition('h', 1).toPosition());
 
             board.placePiece(new Pawn(Color.White, board), new ChessPosition('a', 2).toPosition());
-            board.placePiece(new Pawn(Color.White, board), new ChessPosition('b', 2).toPosition());
+            board.placePiece(new Rook(Color.White, board), new ChessPosition('b', 2).toPosition());
             board.placePiece(new Pawn(Color.White, board), new ChessPosition('c', 2).toPosition());
             board.placePiece(new Pawn(Color.White, board), new ChessPosition('d', 2).toPosition());
             board.placePiece(new Pawn(Color.White, board), new ChessPosition('e', 2).toPosition());
