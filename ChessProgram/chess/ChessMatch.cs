@@ -85,7 +85,32 @@ namespace chess {
             return true;
         }
 
-       
+        private Piece promotePiece(Piece p, Position start, Position end, Piece capped) {
+            System.Console.WriteLine("\nChoose a promotion:");
+            System.Console.WriteLine("Q R B N");
+            char promo = System.Console.ReadLine()[0];
+            active.Remove(p);
+            switch (promo) {
+                case 'Q':
+                    p = new Queen(p.color, board);
+                    break;
+                case 'R':
+                    p = new Rook(p.color, board);
+                    break;
+                case 'B':
+                    p = new Bishop(p.color, board);
+                    break;
+                case 'N':
+                    p = new Knight(p.color, board);
+                    break;
+                default:
+                    active.Add(p);
+                    undoMove(start, end, capped);
+                    throw new BoardException("Invalid promotion");
+            }
+            active.Add(p);
+            return p;
+        }
 
         public Piece movePiece(Position start, Position end) {
             Piece p = board.removePiece(start);
@@ -104,8 +129,8 @@ namespace chess {
             // En passant
 
             // Promotion
-            
-
+            if (p is Pawn && (end.row == board.rows - 1 || end.row == 0))
+                p = promotePiece(p, start, end, capped);
 
             board.placePiece(p, end);
 
