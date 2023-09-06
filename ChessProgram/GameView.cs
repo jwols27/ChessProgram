@@ -24,14 +24,19 @@ namespace ChessProgram {
                 Console.BackgroundColor = originalBg;
             }
             Console.WriteLine("\n   a b c d e f g h");
-            if (match.check)
-                Console.WriteLine("\n   YOU ARE IN CHECK");
+            if (match.check && !match.isOver)
+                Console.WriteLine("\n   YOU ARE IN CHECK!");
+            if (match.isOver)
+                Console.WriteLine("\n   CHECKMATE!!!");
         }
 
         public static void renderMatchInfo(ChessMatch match) {
             Console.Clear();
             Console.WriteLine("Turn " + match.turn);
-            Console.WriteLine("Waiting for " + match.currentPlayer + " to play\n");
+            if(match.isOver)
+                Console.WriteLine(match.currentPlayer + " wins!");
+            else
+                Console.WriteLine("Waiting for " + match.currentPlayer + " to play\n");
             renderCapturedPieces(match);
         }
 
