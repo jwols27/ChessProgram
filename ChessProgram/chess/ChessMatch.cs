@@ -9,6 +9,7 @@ namespace chess {
         public int turn { get; private set; }
         public Color currentPlayer { get; private set; }
         public bool isOver { get; private set; }
+        public bool check { get; private set; }
         private HashSet<Piece> active;
         private HashSet<Piece> captured;
 
@@ -17,6 +18,7 @@ namespace chess {
             turn = 1;
             currentPlayer = Color.White;
             isOver = false;
+            check = false;
             active = new HashSet<Piece>();
             captured = new HashSet<Piece>();
             placePieces();
@@ -32,17 +34,65 @@ namespace chess {
             return captured.Where(p => p.color == color).ToHashSet();
         }
 
-        public void movePiece(Position start, Position end) {
+        public Color opponent(Color color) {
+            if (color == Color.White)
+                return Color.Black;
+            return Color.White;
+        }
+
+        public Piece king(Color color) {
+            foreach (Piece p in activePieces(color))
+                if (p is King) return p;
+            return null;
+        }
+
+        public bool isKingInCheck(Color color) {
+            Piece K = king(color);
+            if (K == null)
+                throw new BoardException("There is no " + color + " king");
+            foreach (Piece p in activePieces(opponent(color))) {
+                bool[,] mat = p.possibleMoves();
+                if (mat[K.position.row, K.position.column])
+                    return true;
+            }
+                
+            return false;
+        }
+
+        public Piece movePiece(Position start, Position end) {
             Piece p = board.removePiece(start);
             p.incrementMoveCount();
             Piece capped = board.removePiece(end);
             if (capped != null)
                 captured.Add(capped);
             board.placePiece(p, end);
+            return capped;
+        }
+
+        public void undoMove(Position start, Position end, Piece capped) {
+            Piece p = board.removePiece(end);
+            p.decreaseMoveCount();
+            if(capped != null) {
+                captured.Remove(capped);
+                board.placePiece(capped, end);
+            }
+            board.placePiece(p, start);
         }
 
         public void play(Position start, Position end) {
-            movePiece(start, end);
+            Piece capped = movePiece(start, end);
+
+            if (isKingInCheck(currentPlayer)) {
+                undoMove(start, end, capped);
+                throw new BoardException("You can't put yourself in check");
+            }
+
+            if (isKingInCheck(opponent(currentPlayer))) {
+                check = true;
+            }
+            else
+                check = false;
+
             turn++;
             changePlayer();
         }
