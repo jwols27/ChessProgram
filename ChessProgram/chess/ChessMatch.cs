@@ -3,8 +3,8 @@
 namespace chess {
     class ChessMatch {
         public Board board { get; private set;}
-        private int turn;
-        private Color currentPlayer;
+        public int turn { get; private set; }
+        public Color currentPlayer { get; private set; }
         public bool isOver { get; private set; }
 
         public ChessMatch() {
@@ -20,6 +20,29 @@ namespace chess {
             p.incrementMoveCount();
             Piece captured = board.removePiece(end);
             board.placePiece(p, end);
+        }
+
+        public void play(Position start, Position end) {
+            movePiece(start, end);
+            turn++;
+            changePlayer();
+        }
+
+        public void changePlayer() {
+            if (currentPlayer == Color.White) {
+                currentPlayer = Color.Black;
+                return;
+            }
+            currentPlayer = Color.White;
+        }
+
+        public void validatePlay(Position pos) {
+            if (board.piece(pos) == null)
+                throw new BoardException("There are no pieces in the chosen position");
+            if (currentPlayer != board.piece(pos).color)
+                throw new BoardException("You cannot move your opponent's pieces");
+            if (!board.piece(pos).hasPossibleMoves())
+                throw new BoardException("This piece has no possible moves");
         }
 
         private void placePieces() {
