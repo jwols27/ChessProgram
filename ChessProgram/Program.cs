@@ -9,24 +9,19 @@ namespace ChessProgram {
             ChessMatch match = new ChessMatch();
             while (!match.isOver) {
                 try {
-                    Console.Clear();
-                    Console.WriteLine("Turn " + match.turn);
-                    Console.WriteLine("Waiting for " + match.currentPlayer + " to play\n");
-                    GameView.renderBoard(match.board);
+                    GameView.renderMatch(match);
 
                     Console.WriteLine("\nFrom:");
                     Position start = GameView.readChessPosition().toPosition();
-                    match.validatePlay(start);
+                    match.validateStart(start);
 
                     bool[,] possibleMoves = match.board.piece(start).possibleMoves();
 
-                    Console.Clear();
-                    Console.WriteLine("Turn " + match.turn);
-                    Console.WriteLine("Waiting for " + match.currentPlayer + " to play\n");
-                    GameView.renderBoard(match.board, possibleMoves);
+                    GameView.renderMatch(match, possibleMoves);
 
                     Console.WriteLine("\nTo:");
                     Position end = GameView.readChessPosition().toPosition();
+                    match.validateEnd(start, end);
 
                     match.play(start, end);
                 }

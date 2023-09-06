@@ -1,23 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using board;
 using chess;
 
 namespace ChessProgram {
     class GameView {
-        public static void renderBoard(Board board) {
-            for(int i = 0; i < board.rows; i++) {
-                Console.Write(8 - i + "  ");
-                for (int j = 0; j < board.columns; j++) {
-                    renderPiece(board.piece(new Position(i, j)));
-                    Console.Write(" ");
-                }
-                Console.WriteLine();
-            }
-            Console.WriteLine("\n   a b c d e f g h");
-        }
+        public static void renderMatch(ChessMatch match, bool[,] posMoves = null) {
+            renderMatchInfo(match);
 
-        public static void renderBoard(Board board, bool[,] posMoves) {
-
+            Board board = match.board;
+            if (posMoves == null) posMoves = new bool[board.rows, board.columns];
             ConsoleColor originalBg = Console.BackgroundColor;
             ConsoleColor highlightedBg = ConsoleColor.DarkGray;
 
@@ -34,6 +26,37 @@ namespace ChessProgram {
             Console.WriteLine("\n   a b c d e f g h");
         }
 
+        public static void renderMatchInfo(ChessMatch match) {
+            Console.Clear();
+            Console.WriteLine("Turn " + match.turn);
+            Console.WriteLine("Waiting for " + match.currentPlayer + " to play\n");
+            renderCapturedPieces(match);
+        }
+
+        public static void renderCapturedPieces(ChessMatch match) {
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.WriteLine("Captured pieces:");
+
+            changeForegroundColor(Color.White);
+            Console.Write("White: ");
+            renderPieceSet(match.capturedPieces(Color.White));
+            
+            changeForegroundColor(Color.Black);
+            Console.Write("Black: ");
+            renderPieceSet(match.capturedPieces(Color.Black));
+
+            Console.WriteLine();
+            Console.ForegroundColor = aux;
+        }
+
+        public static void renderPieceSet(HashSet<Piece> set) {
+            Console.Write("[");
+
+            Console.Write(String.Join(", ", set));
+                
+            Console.WriteLine("]");
+        }
+
         public static ChessPosition readChessPosition() {
             string s = Console.ReadLine();
             char column = s[0];
@@ -46,9 +69,14 @@ namespace ChessProgram {
                 Console.Write("-");
                 return;
             }
-
             ConsoleColor aux = Console.ForegroundColor;
-            switch (p.color) {
+            changeForegroundColor(p.color);
+            Console.Write(p);
+            Console.ForegroundColor = aux;
+        }
+
+        public static void changeForegroundColor(Color color) {
+            switch (color) {
                 case Color.Black:
                     Console.ForegroundColor = ConsoleColor.Red;
                     break;
@@ -64,8 +92,6 @@ namespace ChessProgram {
                 default:
                     break;
             }
-            Console.Write(p);
-            Console.ForegroundColor = aux;
         }
     }
 
