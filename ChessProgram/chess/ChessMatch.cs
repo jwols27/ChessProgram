@@ -59,6 +59,25 @@ namespace chess {
             return false;
         }
 
+        public bool isKingInCheckmate(Color color) {
+            if (!isKingInCheck(color))
+                return false;
+            foreach(Piece p in activePieces(color)) {
+                bool[,] mat = p.possibleMoves();
+                for(int i = 0; i < board.rows; i++)
+                    for (int j = 0; j < board.columns; j++)
+                        if (mat[i, j]) {
+                            Position start = p.position;
+                            Position end = new Position(i, j);
+                            Piece capped = movePiece(start, end);
+                            bool isChecked = isKingInCheck(color);
+                            undoMove(start, end, capped);
+                            if (!isChecked) return false;
+                        }
+            }
+            return true;
+        }
+
         public Piece movePiece(Position start, Position end) {
             Piece p = board.removePiece(start);
             p.incrementMoveCount();
@@ -87,11 +106,10 @@ namespace chess {
                 throw new BoardException("You can't put yourself in check");
             }
 
-            if (isKingInCheck(opponent(currentPlayer))) {
-                check = true;
-            }
-            else
-                check = false;
+            check = isKingInCheck(opponent(currentPlayer));
+
+            isOver = isKingInCheckmate(opponent(currentPlayer));
+            if (isOver) return;
 
             turn++;
             changePlayer();
@@ -125,14 +143,21 @@ namespace chess {
         }
 
         private void placePieces() {
-            placeNewPiece('a', 8, new Rook(Color.Black, board));
-            placeNewPiece('b', 8, new Knight(Color.Black, board));
-            placeNewPiece('c', 8, new Bishop(Color.Black, board));
-            placeNewPiece('d', 8, new Queen(Color.Black, board));
-            placeNewPiece('e', 8, new King(Color.Black, board));
-            placeNewPiece('f', 8, new Bishop(Color.Black, board));
-            placeNewPiece('g', 8, new Knight(Color.Black, board));
-            placeNewPiece('h', 8, new Rook(Color.Black, board));
+
+            placeNewPiece('a', 8, new King(Color.Black, board));
+            placeNewPiece('b', 8, new Rook(Color.Black, board));
+            placeNewPiece('e', 1, new King(Color.White, board));
+            placeNewPiece('e', 7, new Rook(Color.White, board));
+            placeNewPiece('b', 3, new Rook(Color.White, board));
+
+            //placeNewPiece('a', 8, new Rook(Color.Black, board));
+            //placeNewPiece('b', 8, new Knight(Color.Black, board));
+            //placeNewPiece('c', 8, new Bishop(Color.Black, board));
+            //placeNewPiece('d', 8, new Queen(Color.Black, board));
+            //placeNewPiece('e', 8, new King(Color.Black, board));
+            //placeNewPiece('f', 8, new Bishop(Color.Black, board));
+            //placeNewPiece('g', 8, new Knight(Color.Black, board));
+            //placeNewPiece('h', 8, new Rook(Color.Black, board));
 
             //placeNewPiece('a', 7, new Pawn(Color.Black, board));
             //placeNewPiece('b', 7, new Pawn(Color.Black, board));
@@ -143,14 +168,14 @@ namespace chess {
             //placeNewPiece('g', 7, new Pawn(Color.Black, board));
             //placeNewPiece('h', 7, new Pawn(Color.Black, board));
 
-            placeNewPiece('a', 1, new Rook(Color.White, board));
-            placeNewPiece('b', 1, new Knight(Color.White, board));
-            placeNewPiece('c', 1, new Bishop(Color.White, board));
-            placeNewPiece('d', 1, new Queen(Color.White, board));
-            placeNewPiece('e', 1, new King(Color.White, board));
-            placeNewPiece('f', 1, new Bishop(Color.White, board));
-            placeNewPiece('g', 1, new Knight(Color.White, board));
-            placeNewPiece('h', 1, new Rook(Color.White, board));
+            //placeNewPiece('a', 1, new Rook(Color.White, board));
+            //placeNewPiece('b', 1, new Knight(Color.White, board));
+            //placeNewPiece('c', 1, new Bishop(Color.White, board));
+            //placeNewPiece('d', 1, new Queen(Color.White, board));
+            //placeNewPiece('e', 1, new King(Color.White, board));
+            //placeNewPiece('f', 1, new Bishop(Color.White, board));
+            //placeNewPiece('g', 1, new Knight(Color.White, board));
+            //placeNewPiece('h', 1, new Rook(Color.White, board));
 
             //placeNewPiece('a', 2, new Pawn(Color.White, board));
             //placeNewPiece('b', 2, new Pawn(Color.White, board));

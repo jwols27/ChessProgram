@@ -30,6 +30,7 @@ namespace ChessProgram {
                     Console.ReadLine();
                 }
             }
+            GameView.renderMatch(match);
         }
     }
 }
