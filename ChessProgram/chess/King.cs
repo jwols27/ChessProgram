@@ -20,35 +20,35 @@ namespace chess {
 
             Position pos = new Position(0, 0);
 
-            pos.setValues(pos.row - 1, pos.column);
+            pos.setValues(position.row - 1, position.column);
             if(board.isPositionValid(pos) && canMove(pos))
                 mat[pos.row, pos.column] = true;
 
-            pos.setValues(pos.row - 1, pos.column + 1);
+            pos.setValues(position.row - 1, position.column + 1);
             if (board.isPositionValid(pos) && canMove(pos))
                 mat[pos.row, pos.column] = true;
 
-            pos.setValues(pos.row - 1, pos.column - 1);
+            pos.setValues(position.row - 1, position.column - 1);
             if (board.isPositionValid(pos) && canMove(pos))
                 mat[pos.row, pos.column] = true;
 
-            pos.setValues(pos.row + 1, pos.column);
+            pos.setValues(position.row + 1, position.column);
             if (board.isPositionValid(pos) && canMove(pos))
                 mat[pos.row, pos.column] = true;
 
-            pos.setValues(pos.row + 1, pos.column + 1);
+            pos.setValues(position.row + 1, position.column + 1);
             if (board.isPositionValid(pos) && canMove(pos))
                 mat[pos.row, pos.column] = true;
 
-            pos.setValues(pos.row + 1, pos.column - 1);
+            pos.setValues(position.row + 1, position.column - 1);
             if (board.isPositionValid(pos) && canMove(pos))
                 mat[pos.row, pos.column] = true;
 
-            pos.setValues(pos.row, pos.column + 1);
+            pos.setValues(position.row, position.column + 1);
             if (board.isPositionValid(pos) && canMove(pos))
                 mat[pos.row, pos.column] = true;
 
-            pos.setValues(pos.row, pos.column - 1);
+            pos.setValues(position.row, position.column - 1);
             if (board.isPositionValid(pos) && canMove(pos))
                 mat[pos.row, pos.column] = true;
 

@@ -13,6 +13,8 @@ namespace board {
         }
 
         public Piece piece(Position pos) {
+            if (!isPositionValid(pos))
+                throw new BoardException("Invalid position");
             return pieces[pos.row, pos.column];
         }
 
