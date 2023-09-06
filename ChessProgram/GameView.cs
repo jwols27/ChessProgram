@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Collections.Generic;
 using board;
 using chess;
@@ -68,7 +69,7 @@ namespace ChessProgram {
             string s = Console.ReadLine();
             char column = s[0];
             int row = int.Parse(s[1] + "");
-            return new ChessPosition(column, row);
+            return new ChessPosition(Char.ToLower(column), row);
         }
 
         public static void renderPiece(Piece p) {
