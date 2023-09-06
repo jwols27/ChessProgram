@@ -24,6 +24,8 @@ namespace ChessProgram {
                 Console.BackgroundColor = originalBg;
             }
             Console.WriteLine("\n   a b c d e f g h");
+            if (match.check)
+                Console.WriteLine("\n   YOU ARE IN CHECK");
         }
 
         public static void renderMatchInfo(ChessMatch match) {

@@ -18,6 +18,10 @@
             moveCount++;
         }
 
+        public void decreaseMoveCount() {
+            moveCount--;
+        }
+
         public bool hasPossibleMoves() {
             bool[,] mat = possibleMoves();
             for (int i = 0; i < board.rows; i++)
