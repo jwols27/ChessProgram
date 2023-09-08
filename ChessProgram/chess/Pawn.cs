@@ -2,8 +2,11 @@
 
 namespace chess {
     class Pawn : ChessPiece {
-        public Pawn(Color color, Board board) : base(color, board) {
 
+        private ChessMatch match;
+
+        public Pawn(Color color, Board board, ChessMatch match) : base(color, board) {
+            this.match = match;
         }
 
         public override string ToString() {
@@ -17,10 +20,34 @@ namespace chess {
 
             int x = 0;
 
-            if (color == Color.White)
+            // En passant
+            if (color == Color.White) {
                 x = -1;
-            if (color == Color.Black)
+                if(position.row == 3 && match.enPassantable != null) {
+                    Position l = position.setColumn(-1);
+                    Position r = position.setColumn(1);
+                    Piece left = board.isPositionValid(l) ? board.piece(l) : null;
+                    Piece right = board.isPositionValid(r) ? board.piece(r) : null;
+                    if (match.enPassantable == left) 
+                        mat[l.row + x, l.column] = true;
+                    if(match.enPassantable == right)
+                        mat[r.row + x, r.column] = true;
+                }
+            }
+                
+            if (color == Color.Black) {
                 x = 1;
+                if (position.row == 4 && match.enPassantable != null) {
+                    Position l = position.setColumn(-1);
+                    Position r = position.setColumn(1);
+                    Piece left = board.isPositionValid(l) ? board.piece(l) : null;
+                    Piece right = board.isPositionValid(r) ? board.piece(r) : null;
+                    if (match.enPassantable == left)
+                        mat[l.row + x, l.column] = true;
+                    if (match.enPassantable == right)
+                        mat[r.row + x, r.column] = true;
+                }
+            }
 
             pos.setValues(position.row + x, position.column);
             if (board.isPositionValid(pos) && canMove(pos))
@@ -33,12 +60,14 @@ namespace chess {
             }
 
             pos.setValues(position.row + x, position.column - 1);
-            if (board.piece(pos) != null && board.piece(pos).color != color)
-                mat[pos.row, pos.column] = true;
+            if(board.isPositionValid(pos))
+                if (board.piece(pos) != null && board.piece(pos).color != color)
+                    mat[pos.row, pos.column] = true;
 
             pos.setValues(position.row + x, position.column + 1);
-            if (board.piece(pos) != null && board.piece(pos).color != color)
-                mat[pos.row, pos.column] = true;
+            if (board.isPositionValid(pos))
+                if (board.piece(pos) != null && board.piece(pos).color != color)
+                    mat[pos.row, pos.column] = true;
 
             return mat;
         }
